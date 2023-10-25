@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/White"
+    tools:context=".ui.activity.PriorityTaskViewActivity">
+
+    <include
+        android:id="@+id/addtaskheader"
+        layout="@layout/task_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addtaskheader">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/title_input_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:text="Walking"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/Black"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Date"
+        android:textColor="@color/Black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+    <ImageButton
+        android:id="@+id/calendarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_calendar_month_24"
+        app:layout_constraintEnd_toEndOf="@id/textTime"
+        app:layout_constraintStart_toEndOf="@id/textdate"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Time"
+
+        android:textColor="@color/Black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/timebutton"
+        app:layout_constraintStart_toEndOf="@id/calendarButton"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+    <ImageButton
+        android:id="@+id/timebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_access_time_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textTime"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+
+    <EditText
+        android:id="@+id/dateInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="11/11/11"
+        android:foregroundGravity="center"
+        android:hint="DD/MM/YYYY"
+        android:inputType="date"
+        android:textColor="@color/Black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/timeInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textdate" />
+
+    <EditText
+        android:id="@+id/timeInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="20dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:hint="hh:mm"
+        android:text="11:12"
+        android:inputType="date"
+        android:padding="10dp"
+        android:textColor="@color/Black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/toggle_am_pm"
+        app:layout_constraintStart_toEndOf="@id/dateInput"
+        app:layout_constraintTop_toBottomOf="@id/textTime" />
+
+    <ToggleButton
+        android:id="@+id/toggle_am_pm"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/Black"
+        android:textOff="AM"
+        android:textOn="PM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/timeInput"
+        app:layout_constraintTop_toBottomOf="@id/timebutton" />
+
+    <TextView
+        android:id="@+id/textdescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="start"
+        android:padding="5dp"
+        android:text="Description"
+        android:textColor="@color/Black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateInput" />
+
+    <EditText
+        android:id="@+id/contentInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:hint="Content"
+        android:text="you had to walk for 5 km ."
+        android:inputType="textMultiLine"
+        android:padding="5dp"
+        android:textColor="@color/Black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textdescription" />
+    <TextView
+        android:id="@+id/sidetext"
+        android:layout_width="0dp"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toStartOf="@id/togglesidebtn"
+        android:textColor="@color/Black"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/contentInput"
+        android:text="Side"
+        android:padding="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+      />
+    <ToggleButton
+        android:id="@+id/togglesidebtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textOn="Urgent"
+        android:textOff="Non-Urgent"
+        android:textColor="@color/Black"
+        android:layout_margin="20dp"
+        android:gravity="bottom|center"
+        app:layout_constraintStart_toEndOf="@id/sidetext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contentInput"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@id/categoreiesLayout"/>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/categoreiesLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/sidetext"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    >
+    <TextView
+        android:id="@+id/textcategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Categories"
+        android:textColor="@color/Black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radiotaskgroups"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textcategories">
+
+        <RadioButton
+            android:id="@+id/radiobtnwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Work"
+            android:textColor="@color/Black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radiobtnpriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Priority"
+            android:textColor="@color/Black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radiobtnRoutine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Routine"
+            android:textColor="@color/Black"
+            android:textSize="16sp" />
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="OK"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoreiesLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
