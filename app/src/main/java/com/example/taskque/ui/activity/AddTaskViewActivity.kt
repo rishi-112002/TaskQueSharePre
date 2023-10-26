@@ -3,7 +3,6 @@ package com.example.taskque.ui.activity
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -21,9 +20,11 @@ import android.widget.ToggleButton
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.taskque.R
+import com.example.taskque.db.FireStoreManager
 import com.example.taskque.db.InMemoryStore
 import com.example.taskque.utils.Constants.MyIntents.TASK_TYPE_ITEM_EXTRA
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Calendar
@@ -32,11 +33,14 @@ class AddTaskViewActivity : AppCompatActivity() {
 
     private val TAG: String = "ADD_TASK_VIEW"
     private var taskType: String = ""
-
+    private lateinit var db: FirebaseFirestore
+    private val fireStoreManager = FireStoreManager()
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtaskview)
+        db = FirebaseFirestore.getInstance()
+
         val timeInput = findViewById<EditText>(R.id.timeInput)
         val dateInput = findViewById<EditText>(R.id.dateInput)
         val titletext = findViewById<TextInputEditText>(R.id.title_input_text)
@@ -62,6 +66,9 @@ class AddTaskViewActivity : AppCompatActivity() {
 
         val jsonObj = JSONObject()
         submitbutton.setOnClickListener(View.OnClickListener {
+            fireStoreManager.getData { taskData->
+                Log.d(TAG , taskData.toString())
+            }
             if (titletext.text!!.isEmpty() || contentInput.text.isEmpty() || dateInput.text.isEmpty() || timeInput.text.isEmpty()) {
                 Toast.makeText(this, "Please fill all required Information ", Toast.LENGTH_SHORT)
                     .show()
@@ -95,14 +102,28 @@ class AddTaskViewActivity : AppCompatActivity() {
                     }
                 }
             }
+            val tittle = titletext.text.toString()
+            val date = dateInput.text.toString()
+            val time = timeInput.text
+            val description = contentInput.text.toString()
             val toggleSide = if (togglesidebtn.isChecked) "Urgent" else "Non-Urgent"
-            jsonObj.put("title", titletext.text.toString())
-            jsonObj.put("date", dateInput.text.toString())
-            jsonObj.put("time", timeInput.text)
-            jsonObj.put("content", contentInput.text.toString())
-            jsonObj.put("side", toggleSide)
-            jsonObj.put("tasktype", taskType)
-            Log.d(TAG, jsonObj.toString())
+//            jsonObj.put("title", titletext.text.toString())
+//            jsonObj.put("date", dateInput.text.toString())
+//            jsonObj.put("time", timeInput.text)
+//            jsonObj.put("content", contentInput.text.toString())
+//            jsonObj.put("side", toggleSide)
+//            jsonObj.put("tasktype", taskType)
+//            Log.d(TAG, jsonObj.toString())
+            val taskData = hashMapOf(
+                "tittle" to tittle,
+                "date" to date,
+                "time" to time.toString(),
+                "description" to description,
+                "toggleSide" to toggleSide,
+                "taskType" to taskType
+            )
+            Log.d(TAG, taskData.toString())
+
             if (TextUtils.isEmpty(InMemoryStore.getData())) {
                 val jsonArr = JSONArray()
                 jsonObj.put("id", 1)
@@ -114,26 +135,28 @@ class AddTaskViewActivity : AppCompatActivity() {
                 jsonArr.put(jsonObj);
                 InMemoryStore.setData(jsonArr.toString());
             }
+            fireStoreManager.addTask(taskData , taskType)
+
             finish()
         })
 
 
-        datetext.setOnClickListener(View.OnClickListener {
+        datetext.setOnClickListener {
             showDatePicker()
-        })
+        }
 
-        calendarButton.setOnClickListener(View.OnClickListener {
+        calendarButton.setOnClickListener {
             showDatePicker()
-        })
+        }
 
 
-        timeButton.setOnClickListener(View.OnClickListener {
-            ShowtimePicker()
-        })
+        timeButton.setOnClickListener {
+            showTimePicker()
+        }
 
-        texttime.setOnClickListener(View.OnClickListener {
-            ShowtimePicker()
-        })
+        texttime.setOnClickListener {
+            showTimePicker()
+        }
         val addtasktoobar = findViewById<Toolbar>(R.id.addtaskheader)
         addtasktoobar.title = "TaskQue"
         addtasktoobar.subtitle = "add new task here"
@@ -149,9 +172,9 @@ class AddTaskViewActivity : AppCompatActivity() {
         val date: Int = calendar.get(Calendar.DAY_OF_MONTH)
         val month: Int = calendar.get(Calendar.MONTH)
         val year: Int = calendar.get(Calendar.YEAR)
-        val datePickerDialog: DatePickerDialog = DatePickerDialog(
+        val datePickerDialog = DatePickerDialog(
             this,
-            DatePickerDialog.OnDateSetListener { view, selectedyear, selectedmonth, selecteddate ->
+            { view, selectedyear, selectedmonth, selecteddate ->
                 val selectedDate = "$selecteddate/${selectedmonth + 1}/$selectedyear"
                 updateDate(selectedDate)
             },
@@ -161,20 +184,20 @@ class AddTaskViewActivity : AppCompatActivity() {
 
     }
 
-    fun updateDate(data: String) {
+    private fun updateDate(data: String) {
         val dateText = findViewById<EditText>(R.id.dateInput)
         dateText.setText(data).toString()
-        dateText.setOnClickListener(View.OnClickListener {
+        dateText.setOnClickListener {
             showDatePicker()
-        })
+        }
     }
 
-    fun ShowtimePicker() {
+    private fun showTimePicker() {
         val calendar = Calendar.getInstance()
         val hh: Int = calendar.get(Calendar.HOUR)
         val mm: Int = calendar.get(Calendar.MINUTE)
-        val timePickerDialog: TimePickerDialog = TimePickerDialog(
-            this, TimePickerDialog.OnTimeSetListener { view, selecthour, selectminute ->
+        val timePickerDialog = TimePickerDialog(
+            this, { view, selecthour, selectminute ->
                 val Selecttime = "$selecthour:$selectminute"
                 UpdateTime(Selecttime)
 
@@ -184,7 +207,7 @@ class AddTaskViewActivity : AppCompatActivity() {
         timePickerDialog.show()
     }
 
-    fun UpdateTime(time: String) {
+    private fun UpdateTime(time: String) {
         val timeInput = findViewById<EditText>(R.id.timeInput)
         timeInput.setText(time).toString()
 
@@ -197,7 +220,9 @@ class AddTaskViewActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
 }
+
+
+
 
 

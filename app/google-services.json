@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1050057034135",
+    "project_id": "taskquefs",
+    "storage_bucket": "taskquefs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050057034135:android:fd95e6984e72ccf3e01cd2",
+        "android_client_info": {
+          "package_name": "com.example.taskque"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCckPNRuQLMedbQZGJ1wwyT5SgmNDSRO_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

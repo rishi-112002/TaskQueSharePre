@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import com.example.taskque.models.ItemData
-import com.example.taskque.ui.activity.HomePageViewActivity
 import com.example.taskque.utils.Constants.MyIntents.PREFERENCE_KEY
 import com.example.taskque.utils.Constants.MyIntents.SHAREDPREFERENCE_KEY
 import com.example.taskque.utils.Constants.MyIntents.taskPriority
@@ -16,10 +14,15 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 object InMemoryStore {
+    var priorityTaskId: String = ""
+    var routineTaskId: String = ""
+    var workTaskId: String = ""
+
+
     private val TAG: String = "IN_MEMORY_STORE"
     private var myString: String = ""
     private lateinit var sharedPreferences: SharedPreferences
-    fun initalizePreference(context: Context) {
+    fun initializePreference(context: Context) {
         sharedPreferences = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE)
         myString = sharedPreferences.getString(SHAREDPREFERENCE_KEY, "") ?: ""
     }
@@ -119,5 +122,7 @@ object InMemoryStore {
         Log.d(TAG, "hello")
 
     }
+
+
 
 }

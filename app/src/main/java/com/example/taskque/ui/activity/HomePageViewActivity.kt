@@ -3,9 +3,7 @@ package com.example.taskque.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -13,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskque.models.ItemData
 import com.example.taskque.R
+import com.example.taskque.db.FireStoreManager
 import com.example.taskque.db.InMemoryStore
 import com.example.taskque.interfaces.DataItemClickListener
 import com.example.taskque.ui.adapter.RecycleViewAdapter
 import com.example.taskque.utils.Constants.MyIntents.DATA_ITEM_EXTRA
 import com.example.taskque.utils.Constants.MyIntents.TASK_TYPE_ITEM_EXTRA
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FieldPath.documentId
 import org.json.JSONArray
 
 class HomePageViewActivity : AppCompatActivity() {
@@ -27,6 +27,7 @@ class HomePageViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.listview)
+        val addTaskActivity = AddTaskViewActivity()
         val button = findViewById<FloatingActionButton>(R.id.addButton)
         val workTaskButton = findViewById<ImageButton>(R.id.WorkTaskButton)
         val priorityTakButton = findViewById<ImageButton>(R.id.PriorityTaskButton)
@@ -37,11 +38,10 @@ class HomePageViewActivity : AppCompatActivity() {
         toolbar.inflateMenu(R.menu.menu_main)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.reset ->
-                {
+                R.id.reset -> {
                     InMemoryStore.deletAllData()
                     setData()
-                    Toast.makeText(this, "all enter's are deleted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "all enters are deleted", Toast.LENGTH_SHORT).show()
                     return@setOnMenuItemClickListener true
                 }
 
@@ -57,19 +57,19 @@ class HomePageViewActivity : AppCompatActivity() {
             }
         }
 
-        button.setOnClickListener(View.OnClickListener {
+        button.setOnClickListener {
             addtask()
-        })
-        workTaskButton.setOnClickListener(View.OnClickListener {
+        }
+        workTaskButton.setOnClickListener {
             worktask()
-        })
+        }
 
-        priorityTakButton.setOnClickListener(View.OnClickListener {
+        priorityTakButton.setOnClickListener {
             priorityTask()
-        })
-        routineTaskButton.setOnClickListener(View.OnClickListener {
+        }
+        routineTaskButton.setOnClickListener {
             routineTask()
-        })
+        }
 
     }
 
@@ -78,33 +78,22 @@ class HomePageViewActivity : AppCompatActivity() {
         val customadapter = RecycleViewAdapter()
         recycleviewOngoing.layoutManager = LinearLayoutManager(this)
         recycleviewOngoing.adapter = customadapter
-        val inputdata = ArrayList<ItemData>()
-        if (!TextUtils.isEmpty(InMemoryStore.getData())) {
-            val jsonArray = JSONArray(InMemoryStore.getData())
-            for (i in 0 until jsonArray.length()) {
-                val jsonObj = jsonArray.getJSONObject(i)
-                val itemData = ItemData(
-                    jsonObj.getString("title"),
-                    jsonObj.getString("date"),
-                    jsonObj.getString("time"),
-                    jsonObj.getString("content"),
-                    jsonObj.getString("side"),
-                    jsonObj.getString("tasktype"),
-                    jsonObj.getInt("id")
-                )
-                inputdata.add(itemData)
-            }
-            customadapter.setList(inputdata)
-            customadapter.setListener(object : DataItemClickListener {
-                override fun onItemClicked(model: ItemData) {
-                    val intent =
-                        Intent(this@HomePageViewActivity, DetailedViewActivity::class.java);
-                    intent.putExtra(DATA_ITEM_EXTRA, model);
-                    startActivity(intent)
-                }
-            })
+
+        FireStoreManager().getData { taskData ->
+            customadapter.setList(taskData)
+            Log.d(TAG, taskData.toString())
         }
+
+        customadapter.setListener(object : DataItemClickListener {
+            override fun onItemClicked(model: ItemData) {
+                val intent =
+                    Intent(this@HomePageViewActivity, DetailedViewActivity::class.java);
+                intent.putExtra(DATA_ITEM_EXTRA, model);
+                startActivity(intent)
+            }
+        })
     }
+
 
     override fun onResume() {
         super.onResume()

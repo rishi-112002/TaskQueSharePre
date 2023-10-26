@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskque.models.ItemData
 import com.example.taskque.R
+import com.example.taskque.db.FireStoreManager
 import com.example.taskque.db.InMemoryStore
 import com.example.taskque.interfaces.DataItemClickListener
 import com.example.taskque.ui.adapter.RecycleViewAdapter
@@ -45,38 +46,22 @@ class WorkTasksViewActivity : AppCompatActivity() {
         setData()
     }
 
-    fun setData() {
+    private fun setData() {
         val workrecycleview = findViewById<RecyclerView>(R.id.workRecycleview)
         val workadapter = RecycleViewAdapter()
-        val inputdata = ArrayList<ItemData>()
         workrecycleview.layoutManager = LinearLayoutManager(this)
         workrecycleview.adapter = workadapter
-        if (!TextUtils.isEmpty(InMemoryStore.getWorkData())) {
-            val jsonArray = JSONArray(InMemoryStore.getWorkData())
-            for (i in 0 until jsonArray.length()) {
-                val jsonObj = jsonArray.getJSONObject(i)
-                val itemData = ItemData(
-                    jsonObj.getString("title"),
-                    jsonObj.getString("date"),
-                    jsonObj.getString("time"),
-                    jsonObj.getString("content"),
-                    jsonObj.getString("side"),
-                    jsonObj.getString("tasktype"),
-                    jsonObj.getInt("id")
-
-                )
-                inputdata.add(itemData)
-            }
-            workadapter.setList(inputdata)
-            workadapter.setListener(object : DataItemClickListener {
-                override fun onItemClicked(model: ItemData) {
-                    val intent =
-                        Intent(this@WorkTasksViewActivity, DetailedViewActivity::class.java);
-                    intent.putExtra(Constants.MyIntents.DATA_ITEM_EXTRA, model);
-                    startActivity(intent)
-                }
-            })
+        FireStoreManager().getWorkTask { workTasks ->
+            workadapter.setList(workTasks)
         }
+        workadapter.setListener(object : DataItemClickListener {
+            override fun onItemClicked(model: ItemData) {
+                val intent =
+                    Intent(this@WorkTasksViewActivity, DetailedViewActivity::class.java);
+                intent.putExtra(Constants.MyIntents.DATA_ITEM_EXTRA, model);
+                startActivity(intent)
+            }
+        })
     }
 
 
