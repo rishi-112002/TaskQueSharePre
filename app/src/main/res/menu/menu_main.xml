@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/reset"
-        android:title="Reset" />
+        android:title="@string/reset" />
     <item
         android:id="@+id/exit"
-        android:title="Exit" />
+        android:title="@string/exit" />
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout" />
 </menu>

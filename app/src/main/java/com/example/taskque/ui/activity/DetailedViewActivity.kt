@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.example.taskque.R
+import com.example.taskque.db.FireStoreManager
 import com.example.taskque.db.InMemoryStore
 import com.example.taskque.models.ItemData
 import com.example.taskque.utils.Constants.MyIntents.DATA_ITEM_EXTRA
@@ -26,6 +27,11 @@ class DetailedViewActivity : AppCompatActivity() {
     private lateinit var detailinputtitle: TextView
     private val TAG: String = "DETAILED_VIEW_ACTIVITY"
      private var itemData: ItemData? = null
+//    val fireStoreManager = FireStoreManager()
+//    val fireStoreData = fireStoreManager.getData {taskdata->
+//
+//    }
+//    val retriveItemData = fireStoreManager.getItemData(itemData , fireStoreManager)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -68,21 +74,13 @@ class DetailedViewActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val jsonObject = itemData?.let { InMemoryStore.getJsonObject(it) }
-        val title = jsonObject!!.getString("title")
-        val date = jsonObject.getString("date")
-        val time = jsonObject.getString("time")
-        val content = jsonObject.getString("content")
-        val side = jsonObject.getString("side")
-        val taskType = jsonObject.getString("tasktype")
-        val id = jsonObject.getInt("id")
-
-        detailinputtitle.text = title.toString()
-        detailinputdate.text = date.toString()
-        detailinputtime.text = time.toString()
-        detailinputcontent.text = content.toString()
-        detailinputside.text = side.toString()
-        detailtasktype.text = taskType.toString()
-        Log.d(TAG, jsonObject.toString())
+        
+//        detailinputtitle.text = title.toString()
+//        detailinputdate.text = date.toString()
+//        detailinputtime.text = time.toString()
+//        detailinputcontent.text = content.toString()
+//        detailinputside.text = side.toString()
+//        detailtasktype.text = taskType.toString()
+//        Log.d(TAG, jsonObject.toString())
     }
 }

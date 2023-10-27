@@ -24,7 +24,11 @@ import org.json.JSONArray
 
 class WorkTasksViewActivity : AppCompatActivity() {
 
-
+    private val fireStoreManager: FireStoreManager by lazy {
+        val manager = FireStoreManager()
+        manager.initializePreference() // Initialize with the appropriate context
+        manager
+    }
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -51,7 +55,7 @@ class WorkTasksViewActivity : AppCompatActivity() {
         val workadapter = RecycleViewAdapter()
         workrecycleview.layoutManager = LinearLayoutManager(this)
         workrecycleview.adapter = workadapter
-        FireStoreManager().getWorkTask { workTasks ->
+        fireStoreManager.getWorkTask { workTasks ->
             workadapter.setList(workTasks)
         }
         workadapter.setListener(object : DataItemClickListener {

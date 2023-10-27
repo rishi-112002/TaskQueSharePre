@@ -1,8 +1,11 @@
 package com.example.taskque.ui.activity
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
@@ -11,18 +14,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskque.models.ItemData
 import com.example.taskque.R
+import com.example.taskque.auth.LoginPage
 import com.example.taskque.db.FireStoreManager
 import com.example.taskque.db.InMemoryStore
 import com.example.taskque.interfaces.DataItemClickListener
 import com.example.taskque.ui.adapter.RecycleViewAdapter
+import com.example.taskque.utils.Constants
 import com.example.taskque.utils.Constants.MyIntents.DATA_ITEM_EXTRA
+import com.example.taskque.utils.Constants.MyIntents.SHARED_PREFERENCE_KEY
 import com.example.taskque.utils.Constants.MyIntents.TASK_TYPE_ITEM_EXTRA
+import com.example.taskque.utils.Constants.MyIntents.USER_EMAIL
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FieldPath.documentId
 import org.json.JSONArray
 
 class HomePageViewActivity : AppCompatActivity() {
     private val TAG: String = "LIST_VIEW_ACTIVITY"
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private val fireStoreManager: FireStoreManager by lazy {
+        val manager = FireStoreManager()
+        manager.initializePreference() // Initialize with the appropriate context
+        manager
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +48,8 @@ class HomePageViewActivity : AppCompatActivity() {
         val routineTaskButton = findViewById<ImageButton>(R.id.RoutineTaskButton)
         val toolbar = findViewById<Toolbar>(R.id.toolbarheader)
         val userimage = findViewById<ImageButton>(R.id.userimage)
+        sharedPreferences =
+            getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE)
         setData()
         toolbar.inflateMenu(R.menu.menu_main)
         toolbar.setOnMenuItemClickListener {
@@ -45,9 +61,17 @@ class HomePageViewActivity : AppCompatActivity() {
                     return@setOnMenuItemClickListener true
                 }
 
-
                 R.id.exit -> {
                     finish()
+                    return@setOnMenuItemClickListener true
+                }
+
+                R.id.logout -> {
+                    val editor = sharedPreferences.edit()
+                    editor.clear()
+                    editor.apply()
+                    val intent = Intent(this , LoginPage::class.java)
+                    startActivity(intent)
                     return@setOnMenuItemClickListener true
                 }
 
@@ -79,7 +103,7 @@ class HomePageViewActivity : AppCompatActivity() {
         recycleviewOngoing.layoutManager = LinearLayoutManager(this)
         recycleviewOngoing.adapter = customadapter
 
-        FireStoreManager().getData { taskData ->
+        fireStoreManager.getData { taskData ->
             customadapter.setList(taskData)
             Log.d(TAG, taskData.toString())
         }
@@ -124,6 +148,9 @@ class HomePageViewActivity : AppCompatActivity() {
         )
         startActivity(intent)
     }
+
+
+
 }
 
 

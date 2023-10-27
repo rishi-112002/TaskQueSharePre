@@ -3,7 +3,9 @@
     <style name="Base.Theme.TaskQue" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowDisablePreview">true</item>
     </style>
+
 
     <style name="CustomCardStyle" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/White</item>
@@ -15,6 +17,7 @@
     </style>
 
     <style name="Theme.TaskQue" parent="Base.Theme.TaskQue">
+        <item name="android:windowDisablePreview">true</item>
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
@@ -25,6 +28,7 @@
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowDisablePreview">true</item>
         <item name="colorPrimary">@color/Black</item>
         <item name="colorPrimaryDark">@color/Black</item>
         <item name="colorAccent">@color/Black</item>
@@ -34,4 +38,9 @@
 <item name="color">@color/Black</item>
 <item name="android:background">@color/White</item>
     </style>
-    </resources>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+</resources>

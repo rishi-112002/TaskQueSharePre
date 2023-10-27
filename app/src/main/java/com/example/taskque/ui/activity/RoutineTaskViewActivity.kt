@@ -22,7 +22,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 
 class RoutineTaskViewActivity : AppCompatActivity() {
-
+    private val fireStoreManager: FireStoreManager by lazy {
+        val manager = FireStoreManager()
+        manager.initializePreference() // Initialize with the appropriate context
+        manager
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.routine_task_view)
@@ -49,7 +53,7 @@ class RoutineTaskViewActivity : AppCompatActivity() {
         val inputData = ArrayList<ItemData>()
         recycleView.layoutManager = LinearLayoutManager(this)
         recycleView.adapter = customAdapter
-        FireStoreManager().getRoutineTask {routineTask->
+       fireStoreManager.getRoutineTask {routineTask->
             customAdapter.setList(routineTask)
         }
             customAdapter.setListener(object : DataItemClickListener {

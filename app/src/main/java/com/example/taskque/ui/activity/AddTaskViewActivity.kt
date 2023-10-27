@@ -34,7 +34,11 @@ class AddTaskViewActivity : AppCompatActivity() {
     private val TAG: String = "ADD_TASK_VIEW"
     private var taskType: String = ""
     private lateinit var db: FirebaseFirestore
-    private val fireStoreManager = FireStoreManager()
+    private val fireStoreManager: FireStoreManager by lazy {
+        val manager = FireStoreManager()
+        manager.initializePreference() // Initialize with the appropriate context
+        manager
+    }
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

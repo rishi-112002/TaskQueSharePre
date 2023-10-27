@@ -24,6 +24,11 @@ import org.json.JSONObject
 import org.w3c.dom.Text
 
 class PriorityTaskViewActivity : AppCompatActivity() {
+    private val fireStoreManager: FireStoreManager by lazy {
+        val manager = FireStoreManager()
+        manager.initializePreference() // Initialize with the appropriate context
+        manager
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.priority_task_view)
@@ -49,7 +54,7 @@ class PriorityTaskViewActivity : AppCompatActivity() {
         val customadapter = RecycleViewAdapter()
         recycleview.layoutManager = LinearLayoutManager(this)
         recycleview.adapter = customadapter
-        FireStoreManager().getPriorityTask {priorityTasks->
+       fireStoreManager.getPriorityTask {priorityTasks->
             customadapter.setList(priorityTasks)
         }
 

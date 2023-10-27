@@ -5,35 +5,33 @@ import android.content.SharedPreferences
 import android.text.TextUtils
 import android.util.Log
 import com.example.taskque.models.ItemData
+import com.example.taskque.utils.Constants
 import com.example.taskque.utils.Constants.MyIntents.PREFERENCE_KEY
-import com.example.taskque.utils.Constants.MyIntents.SHAREDPREFERENCE_KEY
+import com.example.taskque.utils.Constants.MyIntents.SHARED_PREFERENCE_KEY
 import com.example.taskque.utils.Constants.MyIntents.taskPriority
 import com.example.taskque.utils.Constants.MyIntents.taskRoutine
 import com.example.taskque.utils.Constants.MyIntents.taskWork
+import com.google.firebase.firestore.DocumentSnapshot
 import org.json.JSONArray
 import org.json.JSONObject
 
 object InMemoryStore {
-    var priorityTaskId: String = ""
-    var routineTaskId: String = ""
-    var workTaskId: String = ""
-
 
     private val TAG: String = "IN_MEMORY_STORE"
     private var myString: String = ""
     private lateinit var sharedPreferences: SharedPreferences
     fun initializePreference(context: Context) {
         sharedPreferences = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE)
-        myString = sharedPreferences.getString(SHAREDPREFERENCE_KEY, "") ?: ""
+        myString = sharedPreferences.getString(SHARED_PREFERENCE_KEY, "") ?: ""
     }
 
     fun setData(newValue: String) {
         myString = newValue
-        sharedPreferences.edit().putString(SHAREDPREFERENCE_KEY, myString).apply()
+        sharedPreferences.edit().putString(SHARED_PREFERENCE_KEY, myString).apply()
     }
 
     fun getData(): String {
-        return sharedPreferences.getString(SHAREDPREFERENCE_KEY, "").toString()
+        return sharedPreferences.getString(SHARED_PREFERENCE_KEY, "").toString()
     }
 
     fun updateData(jsonObject: JSONObject) {
@@ -48,7 +46,7 @@ object InMemoryStore {
             updateJArray.put(updateJobject)
         }
         myString = updateJArray.toString()
-        sharedPreferences.edit().putString(SHAREDPREFERENCE_KEY, myString).apply()
+        sharedPreferences.edit().putString(SHARED_PREFERENCE_KEY, myString).apply()
     }
 
     fun getJsonObject(itemData: ItemData): JSONObject {
@@ -122,6 +120,10 @@ object InMemoryStore {
         Log.d(TAG, "hello")
 
     }
+
+
+
+
 
 
 
